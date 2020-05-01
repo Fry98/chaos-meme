@@ -15,15 +15,12 @@ const fullscreenQuad = [
 
 const screenQuad = [
   -0.435, 0.46, 0, 1,
-  -0.432, -0.213, 0, 0,
+  -0.433, -0.213, 0, 0,
   0.14, 0.37, 1, 1,
   0.128, -0.245, 1, 0,
-  -0.432, -0.213, 0, 0,
+  -0.433, -0.213, 0, 0,
   0.14, 0.37, 1, 1,
 ];
-
-const bgImage = new Image();
-bgImage.src = 'bg.png';
 
 const fgImage = new Image();
 fgImage.src = 'fg.png';
@@ -47,14 +44,6 @@ gl.useProgram(program);
 gl.enable(gl.BLEND);
 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-
-const bgTex = gl.createTexture();
-gl.bindTexture(gl.TEXTURE_2D, bgTex);
-gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
 const screenTex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, screenTex);
@@ -100,17 +89,6 @@ gl.enableVertexAttribArray(texAttrib);
 
 let imagesLoaded = 0;
 
-bgImage.onload = () => {
-  gl.bindTexture(gl.TEXTURE_2D, bgTex);
-  gl.texImage2D(
-    gl.TEXTURE_2D,
-    0, gl.RGBA, gl.RGBA,
-    gl.UNSIGNED_BYTE,
-    bgImage
-  );
-  if (++imagesLoaded === 3) init();
-};
-
 fgImage.onload = () => {
   gl.bindTexture(gl.TEXTURE_2D, fgTex);
   gl.texImage2D(
@@ -119,11 +97,11 @@ fgImage.onload = () => {
     gl.UNSIGNED_BYTE,
     fgImage
   );
-  if (++imagesLoaded === 3) init();
+  if (++imagesLoaded === 2) init();
 };
 
 screenImage.onload = () => {
-  if (++imagesLoaded === 3)  init();
+  if (++imagesLoaded === 2)  init();
 };
 
 function init() {
@@ -132,10 +110,6 @@ function init() {
 }
 
 function render(screenImage) {
-  gl.bindTexture(gl.TEXTURE_2D, bgTex);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fullscreenQuad), gl.STATIC_DRAW);
-  gl.drawArrays(gl.TRIANGLES, 0, 6);
-
   gl.bindTexture(gl.TEXTURE_2D, screenTex);
   gl.texImage2D(
     gl.TEXTURE_2D,
