@@ -108,7 +108,7 @@ bgImage.onload = () => {
     gl.UNSIGNED_BYTE,
     bgImage
   );
-  if (++imagesLoaded === 3) render(screenImage);
+  if (++imagesLoaded === 3) init();
 };
 
 fgImage.onload = () => {
@@ -119,12 +119,17 @@ fgImage.onload = () => {
     gl.UNSIGNED_BYTE,
     fgImage
   );
-  if (++imagesLoaded === 3) render(screenImage);
+  if (++imagesLoaded === 3) init();
 };
 
 screenImage.onload = () => {
-  if (++imagesLoaded === 3) render(screenImage);
+  if (++imagesLoaded === 3)  init();
 };
+
+function init() {
+  document.getElementById('loading').style.display = 'none';
+  render(screenImage);
+}
 
 function render(screenImage) {
   gl.bindTexture(gl.TEXTURE_2D, bgTex);
